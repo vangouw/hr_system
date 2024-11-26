@@ -9,16 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('absenteeisms', function (Blueprint $table) {
+        Schema::create('clock_records', function (Blueprint $table) {
             $table->id();
-            $table->string('employee_name');
-            $table->date('absence_date');
-            $table->string('reason');
-            $table->boolean('status')->default(false);
+            $table->unsignedBigInteger('employee_id');
+            $table->timestamp('clock_in');
+            $table->timestamp('clock_out')->nullable();
             $table->timestamps();
-        });
+        });        
     }
 
     /**
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('absenteeisms');
+        Schema::dropIfExists('clock_records');
     }
 };

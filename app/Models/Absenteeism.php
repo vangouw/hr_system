@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Absenteeism extends Model
 {
@@ -13,7 +14,14 @@ class Absenteeism extends Model
         'employee_name',
         'absence_date',
         'reason',
-        'status', // Ensure you have this field if you're using it
+        'status',
+        'clock_in',
+        'clock_out',
+    ];
+
+    // Add this to ensure 'clock_in' and 'clock_out' are automatically cast to Carbon instances
+    protected $casts = [
+        'clock_in' => 'datetime',
+        'clock_out' => 'datetime',
     ];
 }
-

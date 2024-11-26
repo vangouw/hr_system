@@ -11,7 +11,7 @@ class AdminAuthController extends Controller
 {
     public function showLoginForm()
     {
-        return view('admin.login');
+        return view('auth.admin.login');
     }
 
     public function login(Request $request)
@@ -22,7 +22,8 @@ class AdminAuthController extends Controller
         ]);
 
         if (Auth::guard('admin')->attempt($credentials)) {
-            return redirect()->route('home')->with('success', 'Logged in successfully.');
+            // Redirect to absenteeism index page
+            return redirect()->route('absenteeism.index')->with('success', 'Logged in successfully.');
         }
 
         return back()->withErrors([
@@ -32,7 +33,7 @@ class AdminAuthController extends Controller
 
     public function showRegistrationForm()
     {
-        return view('admin.register');
+        return view('auth.admin.register');
     }
 
     public function register(Request $request)
@@ -50,12 +51,15 @@ class AdminAuthController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        return redirect()->route('admin.login')->with('success', 'Registration successful. Please log in.');
+        // Automatically log in the new admin and redirect to absenteeism index
+        Auth::guard('admin')->attempt($request->only('email', 'password'));
+
+        return redirect()->route('absenteeism.index')->with('success', 'Registration successful. You are now logged in.');
     }
 
     public function logout(Request $request)
     {
         Auth::guard('admin')->logout();
-        return redirect()->route('home')->with('success', 'Logged out successfully.');
+        return redirect()->route('welcome')->with('success', 'Logged out successfully.');
     }
 }
